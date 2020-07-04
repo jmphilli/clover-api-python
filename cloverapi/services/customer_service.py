@@ -42,8 +42,11 @@ class CustomerService(object):
         if include_emails:
             expand_str += 'emailAddresses'
         if include_phones:
+            if expand_str:
+                expand_str += ','
             expand_str += 'phoneNumbers'
-        payload['expand'] = expand_str
+        if expand_str:
+            payload['expand'] = expand_str
         # Send Request
         r = requests.get(self.url + '/v3/merchants/' + self.merchant_id + '/customers/' + customer_id,
                          auth=self.auth, timeout=30, params=payload)
