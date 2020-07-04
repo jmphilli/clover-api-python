@@ -35,11 +35,15 @@ class CustomerService(object):
                           auth=self.auth, timeout=30, json=payload)
         return r.json()
 
-    def get_customer_by_id(self, customer_id, include_email: bool):
+    def get_customer_by_id(self, customer_id, include_emails: bool, include_phones: bool):
         # Define Payload
         payload = {}
-        if include_email:
-            payload = {'expand': 'emailAddresses'}
+        expand_str = ''
+        if include_emails:
+            expand_str += 'emailAddresses'
+        if include_phones:
+            expand_str += 'phoneNumbers'
+        payload['expand'] = expand_str
         # Send Request
         r = requests.get(self.url + '/v3/merchants/' + self.merchant_id + '/customers/' + customer_id,
                          auth=self.auth, timeout=30, params=payload)
